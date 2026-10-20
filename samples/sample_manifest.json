@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "description": "Deterministic, synthetic lab packet captures for NetTrace verification",
+  "samples": [
+    {
+      "file": "normal_traffic.pcap",
+      "format": "pcap",
+      "total_packets": 10,
+      "expected_findings": 0,
+      "description": "Clean baseline network traffic with successful DNS resolution and complete HTTP TCP handshake/teardown.",
+      "verification_checks": [
+        "DNS NOERROR response for example.local (10.0.0.80)",
+        "TCP 3-way handshake established between 192.168.1.100:54321 and 10.0.0.80:80",
+        "HTTP GET and HTTP 200 OK exchanged",
+        "Clean FIN/ACK connection termination",
+        "Zero suspicious scan or failure findings"
+      ]
+    },
+    {
+      "file": "incident_troubleshooting.pcap",
+      "format": "pcap",
+      "total_packets": 42,
+      "expected_findings_categories": [
+        "TCP",
+        "DNS",
+        "SCAN",
+        "ANOMALY"
+      ],
+      "description": "Multi-symptom network incident capture with handshakes, resets, DNS failures, and scan patterns.",
+      "verification_checks": [
+        "Incomplete TCP Handshake (192.168.1.105:49152 -> 10.0.0.99:443)",
+        "Connection Reset (10.0.0.80:8080 -> 192.168.1.105)",
+        "Retransmission candidate (Seq 4000 from 192.168.1.105)",
+        "DNS NXDOMAIN response for bad-host-typo.internal",
+        "DNS SERVFAIL response for broken-zone.example",
+        "Unanswered DNS query for telemetry.service.io (to 8.8.8.8)",
+        "Port scan pattern (192.168.1.200 -> 10.0.0.50 on 18 ports)",
+        "Repeated connection attempts (192.168.1.105 -> 10.0.0.99:22)",
+        "Periodic connection candidate (192.168.1.105 -> 10.0.0.80:9000 at 1.0s interval)"
+      ]
+    }
+  ]
+}
